@@ -1,41 +1,60 @@
+class Quotes {
+  constructor(apiCommand) {
+    this.quoteApiRequest = apiCommand
+    this.quotes = []
+    let newQuotes = this.getMoreQuotes()
+    this.quotes = this.quotes.concat(newQuotes)
+  } 
+  
+  getMoreQuotes() {
+    const newQuotesPromise = $.ajax( {
+      url: this.quoteApiRequest,
+      cache: false
+      } )
+    const newQuotes = newQuotesPromise.then(quoteData => {
+      let newQuotes = []
+      quoteData.forEach( quote => {
+        let nextQuote = {}
+        nextQuote.text = $( quote.content ).text().trim()
+        nextQuote.author = quote.title
+        newQuotes.push(nextQuote)
+      })
+      this.quotes = this.quotes.concat(newQuotes)
+    })
+    return newQuotes
+  }
+  
+  newQuote() {
+    if (this.quotes.length < 5) {
+      let newQuotes = this.getMoreQuotes()
+      this.quotes = this.quotes.concat(newQuotes)
+    }
+    const newQuote = this.quotes.shift()
+    return newQuote
+  }
+}
+
 // Activates all the pieces
 // of showing a new quote
 const displayNewQuote = () => {
-  let newQuotePromise = newQuoteData();
-  newQuotePromise.then( quoteData => {
-    let newQuote = {};
-    newQuote.text = $( quoteData[0].content ).text().trim();
-    newQuote.author = quoteData[0].title;
-    displayQuote( newQuote );
-    updateLink( newQuote );
-  } );
-}
-
-// Actually does API fetch,
-// and return new quote info
-// in a promise
-const newQuoteData = () => {
-  return $.ajax( {
-    url: "https://quotesondesign.com/wp-json/posts?filter[orderby]=rand&filter[posts_per_page]=1",
-    cache: false
-    } );
+  const newQuote = quotes.newQuote()
+  displayQuote( newQuote )
+  updateLink( newQuote )
 }
 
 // Displays given quote and author
 const displayQuote = ( quote ) => {
-  $( "#quote" ).html( quote.text );
-  $( "#author" ).html( "- " + quote.author );
+  $( "#quote" ).html( quote.text )
+  $( "#author" ).html( "- " + quote.author )
 }
 
 // Updates link with given quote and author
 const updateLink = ( quote ) => {
   const linkBase = "https://twitter.com/intent/tweet?hashtags=quotes&related=freecodecamp&text="
-  let newLink = linkBase + encodeURI( quote.text + ' ' + quote.author );
-  $( "#twitter-link" ).attr( "href", newLink );
+  let newLink = linkBase + encodeURI( quote.text + ' ' + quote.author )
+  $( "#twitter-link" ).attr( "href", newLink )
 }
 
-// On load: Get a fresh quote to start
-$( document ).ready( displayNewQuote );
+const quotes = new Quotes("https://quotesondesign.com/wp-json/posts?filter[orderby]=rand&filter[posts_per_page]=10")
 
-// Click handlers
-$('#new-quote').click( () => { displayNewQuote() } );
+$('#new-quote').click( () => { displayNewQuote() } )
