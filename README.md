@@ -1,6 +1,9 @@
 # Random Quote Machine
-This was a FreeCodeCamp project to create a page that displays random quotes with the option to tweet them.
+This was a FreeCodeCamp project to create a page that displays random quotes with an option to tweet them.
+I chose to use quotes about design (QuotesOnDesign.com) because I like improving my design skills and this
+would be a way to do that as part of my programming work. (I also went through different revisions on the design
+of the look of the project, too.
 
-This project was completed on CodePen and can be viewed [here](https://codepen.io/jdsandifer/full/BJpZEw/).
+I completed this project on CodePen and you can see it in action [here](https://codepen.io/jdsandifer/full/pQMxGY).
 
-The code is copied to GitHub for easier viewing by type (html, scss, javascript).
+I copied the code to GitHub for easier access and viewing.
